@@ -5,3 +5,8 @@ main = do
   return 3 >>= print
   -- let a = return 1
   -- print a -- エラー
+  let a = return 1
+  a' <- a
+  print a'
+  print =<< a
+  a >>= print
