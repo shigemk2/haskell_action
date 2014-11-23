@@ -3,3 +3,5 @@ main = do
   print a
   print =<< return 2
   return 3 >>= print
+  -- let a = return 1
+  -- print a -- エラー
