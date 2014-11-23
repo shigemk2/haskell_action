@@ -1,8 +1,6 @@
 import System.Random
 
-randAlpha = r
-   where
-     r = getStdRandom $ randomR ('a', 'z')
+randAlpha = getStdRandom $ randomR ('a', 'z')
 
 main = do
   r <- randAlpha
