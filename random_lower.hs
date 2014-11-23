@@ -4,10 +4,7 @@ randAlpha = getStdRandom $ randomR ('a', 'z')
 
 main = do
   r <- randAlpha
+  print r
   if r == 'z'
-     then do
-       print r
-       print "end"
-     else do
-       print r
-       main
+     then print "end"
+     else main
