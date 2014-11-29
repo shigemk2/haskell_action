@@ -3,4 +3,4 @@ main = do
             print i
             loop $ i + 1
         loop _ = return ()
-    loop 0
+    loop (-5)
