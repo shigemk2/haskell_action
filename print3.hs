@@ -7,10 +7,11 @@ test = do
     -- print r
     return r
 
-main = return "hello"
-    print =<< test
-    print "hello"
+main = do
+    -- print "hello"
     test
     test
     test
     test
+    -- print =<< test
+    return ()
