@@ -5,4 +5,8 @@ main = do
              "-]<.+++.------.--------.[-]>++++++++[<++" ++
              "++>-]<+.[-]++++++++++."
 
-    print $ bf !! 0
+    let loop i | i < length bf = do
+          print $ bf !! i
+          loop $ i + 1
+        loop _ = return ()
+    loop 0
