@@ -14,7 +14,7 @@ sort (x:y:xs)
 
 bogosort xs = do
   xs' <- shuffle xs
-  if sort xs' == True
+  if sort xs'
   then return xs'
   else bogosort xs'
 
