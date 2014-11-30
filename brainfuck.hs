@@ -5,10 +5,10 @@ main = do
     --          ".>+++++++++++[<+++++>-]<.>++++++++[<+++>" ++
     --          "-]<.+++.------.--------.[-]>++++++++[<++" ++
     --          "++>-]<+.[-]++++++++++."
-    let bf = "++++++++++++++++++++++++++++++" ++
-             "++++++++++++++++++++++++++++++" ++
-             "++++++++++++."
-    -- let bf = "+++++++++[++++++++]>."
+    -- let bf = "++++++++++++++++++++++++++++++" ++
+    --          "++++++++++++++++++++++++++++++" ++
+    --          "++++++++++++."
+    let bf = "+++++++++[++++++++]>."
     jmp <- newArray (0, length bf + 1) 0 :: IO (IOUArray Int Int)
     let loops = []
 
@@ -42,9 +42,22 @@ main = do
               a <- readArray m r
               putChar $ toEnum $ fromIntegral $ a
               scanbf (pc + 1) r
-            -- '[' -> do
-            --   a <- readArray m r
-            --   if a == 0 then 
+            '[' -> do
+              a <- readArray m r
+              if a == 0
+              then do
+                pc <- readArray jmp pc
+                scanbf pc r
+              else do
+                scanbf (pc + 1) r
+            ']' -> do
+              a <- readArray m r
+              if a /= 0
+              then do
+                pc <- readArray jmp pc
+                scanbf (pc - 1) r
+              else do
+                scanbf (pc + 1) r
             _ -> do
               scanbf (pc + 1) r
         scanbf _ _ = return ()
