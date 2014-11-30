@@ -17,23 +17,26 @@ for (var i = 0, loops = []; i < bf.length; ++i) {
         break;
     }
 }
-
-var pc = 0, r = 0, m = new Uint8Array(30000);
-while (pc < bf.length) {
-    switch (bf[pc]) {
-    case '+': ++m[r]; break;
-    case '-': --m[r]; break;
-    case '>': ++r; break;
-    case '<': --r; break;
-    case '.':
-        process.stdout.write(String.fromCharCode(m[r]));
-        break;
-    case '[':
-        if (m[r] == 0) pc = jmp[pc];
-        break;
-    case ']':
-        if (m[r] != 0) pc = jmp[pc] - 1;
-        break;
-    }
-    ++pc;
+for (var i = 0; i < bf.length; ++i) {
+  console.log(i, bf[i], jmp[i]);
 }
+
+// var pc = 0, r = 0, m = new Uint8Array(30000);
+// while (pc < bf.length) {
+//     switch (bf[pc]) {
+//     case '+': ++m[r]; break;
+//     case '-': --m[r]; break;
+//     case '>': ++r; break;
+//     case '<': --r; break;
+//     case '.':
+//         process.stdout.write(String.fromCharCode(m[r]));
+//         break;
+//     case '[':
+//         if (m[r] == 0) pc = jmp[pc];
+//         break;
+//     case ']':
+//         if (m[r] != 0) pc = jmp[pc] - 1;
+//         break;
+//     }
+//     ++pc;
+// }
