@@ -28,22 +28,25 @@ main = do
     print =<< getElems jmp
 
     m <- newArray (0, 30000) 0 :: IO (IOUArray Int Int)
-    let scanbf i r | i < length bf = do
-          case bf !! i of
+    let scanbf pc r | pc < length bf = do
+          case bf !! pc of
             '+' -> do
               a <- readArray m r
               writeArray m r (a + 1)
-              scanbf (i + 1) r
+              scanbf (pc + 1) r
             '-' -> do
               a <- readArray m r
               writeArray m r (a - 1)
-              scanbf (i + 1) r
+              scanbf (pc + 1) r
             '.' -> do
               a <- readArray m r
               putChar $ toEnum $ fromIntegral $ a
-              scanbf (i + 1) r
+              scanbf (pc + 1) r
+            -- '[' -> do
+            --   a <- readArray m r
+            --   if a == 0 then 
             _ -> do
-              scanbf (i + 1) r
+              scanbf (pc + 1) r
         scanbf _ _ = return ()
     scanbf 0 0
 
