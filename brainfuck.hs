@@ -5,29 +5,47 @@ main = do
     --          ".>+++++++++++[<+++++>-]<.>++++++++[<+++>" ++
     --          "-]<.+++.------.--------.[-]>++++++++[<++" ++
     --          "++>-]<+.[-]++++++++++."
-    -- let bf = "++++++++++++++++++++++++++++++" ++
-    --          "++++++++++++++++++++++++++++++" ++
-    --          "++++++++++++."
-    let bf = "+++++++++[++++++++]>."
-    pc <- newArray (0, 30000) 0 :: IO (IOUArray Int Int)
+    let bf = "++++++++++++++++++++++++++++++" ++
+             "++++++++++++++++++++++++++++++" ++
+             "++++++++++++."
+    -- let bf = "+++++++++[++++++++]>."
     jmp <- newArray (0, length bf + 1) 0 :: IO (IOUArray Int Int)
     let loops = []
 
-    -- let scanbf i | (bf !! i) == '[' = do
-    --       loops ++ [i]
-    --       -- a <- readArray pc 0
-    --       -- writeArray pc 0 (a + 1)
-    -- -- let scanbf i | (bf !! i) == ']' = do
-    -- --       putChar $ toEnum $ fromIntegral $ readArray pc 0
-    -- let scanbf _ =  putChar $ toEnum 108
+    let loop i loops | i < length bf = do
+          case bf !! i of
+            '[' -> do
+              loop (i + 1) (i:loops)
+            ']' -> do
+              let (start:loops') = loops
+              writeArray jmp start i
+              writeArray jmp i start
+              loop (i + 1) loops'
+            _ -> do
+              loop (i + 1) loops
+        loop _ _ = return ()
+    loop 0 []
+    print =<< getElems jmp
 
-    -- let loop i | i < length bf = do
-    --       print $ bf !! i
-    --       -- jmp i
-    --       loop $ i + 1
-    --     loop _ = return ()
-    -- loop 0
-
+    m <- newArray (0, 30000) 0 :: IO (IOUArray Int Int)
+    let scanbf i r | i < length bf = do
+          case bf !! i of
+            '+' -> do
+              a <- readArray m r
+              writeArray m r (a + 1)
+              scanbf (i + 1) r
+            '-' -> do
+              a <- readArray m r
+              writeArray m r (a - 1)
+              scanbf (i + 1) r
+            '.' -> do
+              a <- readArray m r
+              putChar $ toEnum $ fromIntegral $ a
+              scanbf (i + 1) r
+            _ -> do
+              scanbf (i + 1) r
+        scanbf _ _ = return ()
+    scanbf 0 0
 
     -- let jmppush s i | i < length bf && (bf !! i) == '[' = jmppush (i : s) (i + 1)
     --     jmppush s i | i < length bf = jmppush s (i + 1)
@@ -47,20 +65,6 @@ main = do
     -- jmppop jmp 0 0
     -- print =<< getElems jmp
 
-    let loop i loops | i < length bf = do
-          case bf !! i of
-            '[' -> do
-              loop (i + 1) (i:loops)
-            ']' -> do
-              let (start:loops') = loops
-              writeArray jmp start i
-              writeArray jmp i start
-              loop (i + 1) loops'
-            _ -> do
-              loop (i + 1) loops
-        loop _ _ = return ()
-    loop 0 []
-    print =<< getElems jmp
     -- let brainfuck i | (bf !! i) == '+' = do
     --       a <- readArray pc 0
     --       writeArray pc 0 (a + 1)
