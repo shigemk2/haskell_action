@@ -1,4 +1,6 @@
 import Data.Array.IO
+import Data.Word
+import Data.Char
 main = do
     let bf = ">+++++++++[<++++++++>-]<.>+++++++[<++++>" ++
              "-]<+.+++++++..+++.[-]>++++++++[<++++>-]<" ++
@@ -25,9 +27,9 @@ main = do
               loop (i + 1) loops
         loop _ _ = return ()
     loop 0 []
-    print =<< getElems jmp
+    -- print =<< getElems jmp
 
-    m <- newArray (0, 30000) 0 :: IO (IOUArray Int Int)
+    m <- newArray (0, 30000) 0 :: IO (IOUArray Int Word8)
     let scanbf pc r | pc < length bf = do
           -- print pc
           case bf !! pc of
@@ -45,7 +47,9 @@ main = do
               scanbf (pc + 1) (r - 1)
             '.' -> do
               a <- readArray m r
+              -- Word8を変換するためのfromIntegral
               putChar $ toEnum $ fromIntegral $ a
+              -- putChar $ chr $ a
               scanbf (pc + 1) r
             '[' -> do
               a <- readArray m r
